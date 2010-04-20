@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+use strict;
+# ttycolor - quickly switch colorscheme in the Linux Console / TTY
+# Copyright (C) 2010 Magnus Woldrich <trapd00r@trapd00r.se>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+########################################################################
+use Getopt::Long;
+
+our ($optColor);
+GetOptions('colorscheme:s' => \$optColor);
+die if !$optColor;
+
+my %palettes = (
+    'trapd00r' => [
+      'P01c1c1c', # dark black
+      'P81c1c1c', # bright black
+      'P9ff6767', # dark red
+      'P24d4c4c', # red
+      'PAb03b31', # dark green
+      'P3ff8f00', # green
+      'PBbdf13d', # brown
+      'P41165e9', # yellow
+      'P41165e9', # dark blue
+      'PC5496ff', # blue
+      'P589005a', # dark magenta
+      'PDb50077', # magenta
+      'P6cb1c13', # dark cyan
+      'PE6be603', # cyan
+      'P7ffffff', # light grey
+      'PFdedede', # white
+      ],
+    'trapd00r2' => [
+      'P0000000',
+      'P83c3c3c',
+      'P9d69300',
+      'P25fa123',
+      ],
+    );
+
+for my $i(0..16) {
+  printf "\033]%s\n", $palettes{$optColor}[$i];
+}
