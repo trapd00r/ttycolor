@@ -20,7 +20,7 @@ use Getopt::Long;
 
 our ($optColor);
 GetOptions('colorscheme:s' => \$optColor);
-die if !$optColor;
+&usage if !@ARGV;
 
 my %palettes = (
     'trapd00r' => [
@@ -46,9 +46,40 @@ my %palettes = (
       'P83c3c3c',
       'P9d69300',
       'P25fa123',
+      'PAa4008a',
+      'P31d90b6',
+      'PB686868',
+      'P495c749',
+      'PCbb005e',
+      'P5bb7d00',
+      'PD367fc5',
+      ],
+    'vekin' =>  [
+      'P0353535',
+      'P8666666',
+      'P9ae4747',
+      'P2ee6363',
+      'PA556b2f',
+      'P39acd32',
+      'PBdaa520',
+      'P4ffc125',
+      'PC6f99b4',
+      'P57c96b0',
+      'PD8b7b8b',
+      'P6d8bfd8',
+      'PEa7a15e',
+      'P7dddddd',
+      'PFffffff',
       ],
     );
 
-for my $i(0..16) {
+
+
+for my $i(0..15) {
   printf "\033]%s\n", $palettes{$optColor}[$i];
+}
+
+sub usage {
+  print "$0 -c colorscheme\n";
+  exit 0;
 }
