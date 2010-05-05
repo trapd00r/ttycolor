@@ -20,7 +20,6 @@ use Getopt::Long;
 
 our ($optColor);
 GetOptions('colorscheme:s' => \$optColor);
-&usage if !@ARGV;
 
 my %palettes = (
     'trapd00r' => [
@@ -71,15 +70,50 @@ my %palettes = (
       'P7dddddd',
       'PFffffff',
       ],
+    'necr0' => [
+      'P01C1C1C',
+      'P84d4d4d',
+      'P1a0c0e0',
+      'P96080a0',
+      'P26080c0',
+      'PA0040a0',
+      'P34060c0',
+      'PB4060a0',
+      'P466AABB',
+      'PCAACCBB',
+      'P5e0f0f0',
+      'PD2060c0',
+      'P65E7175',
+      'PEA3BABF',
+      'P7DDEEDD',
+      'PF6C887',
+      ],
+    'coolio' => [
+      'P0333333', 
+      'P8666666',
+      'P1d15517',
+      'P9d11723',
+      'P236b217',
+      'PA00d56a',
+      'P3d1b217',
+      'PBffea55',
+      'P455aaff',
+      'PC1793d1',
+      'P5b217d1',
+      'PDd11793',
+      'P693d1b2',
+      'PE17d1b2',
+      'P7eeeeee',
+      'PFffffff',
+      ],
+
     );
 
+if(!@ARGV){
+  print "ttycolor -c colorscheme\n", "colorschemes:\n\n";
+  print "$_\n" for sort(keys(%palettes));exit 0}
 
 
 for my $i(0..15) {
   printf "\033]%s\n", $palettes{$optColor}[$i];
-}
-
-sub usage {
-  print "$0 -c colorscheme\n";
-  exit 0;
 }
