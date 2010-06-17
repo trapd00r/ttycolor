@@ -23,8 +23,8 @@ GetOptions('colorscheme:s' => \$optColor);
 
 my %palettes = (
     'trapd00r' => [
-      'P01c1c1c', # dark black
-      'P81c1c1c', # bright black
+      'P0000000', # dark black
+      'P8000000', # bright black
       'P9ff6767', # dark red
       'P24d4c4c', # red
       'PAb03b31', # dark green
@@ -38,24 +38,28 @@ my %palettes = (
       'P6cb1c13', # dark cyan
       'PE6be603', # cyan
       'P7ffffff', # light grey
-      'PFdedede', # white
+      'PFffffff', # white
       ],
     'trapd00r2' => [
       'P0000000',
-      'P83c3c3c',
+      'P8000000',
       'P9d69300',
       'P25fa123',
       'PAa4008a',
       'P31d90b6',
-      'PB686868',
+      'PB3c3c3c', #
       'P495c749',
       'PCbb005e',
       'P5bb7d00',
       'PD367fc5',
+      'P6cb1c13', # dark cyan
+      'PE6be603', # cyan
+      'P7ffffff', # light grey
+      'PFffffff', # white
       ],
     'vekin' =>  [
-      'P0353535',
-      'P8666666',
+      'P0000000',
+      'P8000000',
       'P9ae4747',
       'P2ee6363',
       'PA556b2f',
@@ -71,8 +75,8 @@ my %palettes = (
       'PFffffff',
       ],
     'necr0' => [
-      'P01C1C1C',
-      'P84d4d4d',
+      'P0000000',
+      'P8000000',
       'P1a0c0e0',
       'P96080a0',
       'P26080c0',
@@ -89,8 +93,8 @@ my %palettes = (
       'PF6C887',
       ],
     'coolio' => [
-      'P0333333', 
-      'P8666666',
+      'P0000000', 
+      'P8000000',
       'P1d15517',
       'P9d11723',
       'P236b217',
@@ -109,9 +113,13 @@ my %palettes = (
 
     );
 
-if(!@ARGV){
+usage() if !$optColor;
+
+sub usage {
   print "ttycolor -c colorscheme\n", "colorschemes:\n\n";
-  print "$_\n" for sort(keys(%palettes));exit 0}
+  print "$_\n" for sort(keys(%palettes));
+  exit 0;
+}
 
 
 for my $i(0..15) {
