@@ -1,127 +1,107 @@
 #!/usr/bin/perl
+my $APP = 'ttycolor';
+use vars qw($VERSION);
+$VERSION = '0.05';
+
 use strict;
-# ttycolor - quickly switch colorscheme in the Linux Console / TTY
-# Copyright (C) 2010 Magnus Woldrich <trapd00r@trapd00r.se>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-########################################################################
+use Term::ExtendedColor::TTY;
+use Term::ExtendedColor::TTY::Colorschemes;
 use Getopt::Long;
+use Pod::Usage;
 
-our ($optColor);
-GetOptions('colorscheme:s' => \$optColor);
 
-my %palettes = (
-    'trapd00r' => [
-      'P0000000', # dark black
-      'P8000000', # bright black
-      'P9ff6767', # dark red
-      'P24d4c4c', # red
-      'PAb03b31', # dark green
-      'P3ff8f00', # green
-      'PBbdf13d', # brown
-      'P41165e9', # yellow
-      'P41165e9', # dark blue
-      'PC5496ff', # blue
-      'P589005a', # dark magenta
-      'PDb50077', # magenta
-      'P6cb1c13', # dark cyan
-      'PE6be603', # cyan
-      'P7ffffff', # light grey
-      'PFffffff', # white
-      ],
-    'trapd00r2' => [
-      'P0000000',
-      'P8000000',
-      'P9d69300',
-      'P25fa123',
-      'PAa4008a',
-      'P31d90b6',
-      'PB3c3c3c', #
-      'P495c749',
-      'PCbb005e',
-      'P5bb7d00',
-      'PD367fc5',
-      'P6cb1c13', # dark cyan
-      'PE6be603', # cyan
-      'P7ffffff', # light grey
-      'PFffffff', # white
-      ],
-    'vekin' =>  [
-      'P0000000',
-      'P8000000',
-      'P9ae4747',
-      'P2ee6363',
-      'PA556b2f',
-      'P39acd32',
-      'PBdaa520',
-      'P4ffc125',
-      'PC6f99b4',
-      'P57c96b0',
-      'PD8b7b8b',
-      'P6d8bfd8',
-      'PEa7a15e',
-      'P7dddddd',
-      'PFffffff',
-      ],
-    'necr0' => [
-      'P0000000',
-      'P8000000',
-      'P1a0c0e0',
-      'P96080a0',
-      'P26080c0',
-      'PA0040a0',
-      'P34060c0',
-      'PB4060a0',
-      'P466AABB',
-      'PCAACCBB',
-      'P5e0f0f0',
-      'PD2060c0',
-      'P65E7175',
-      'PEA3BABF',
-      'P7DDEEDD',
-      'PF6C887',
-      ],
-    'coolio' => [
-      'P0000000', 
-      'P8000000',
-      'P1d15517',
-      'P9d11723',
-      'P236b217',
-      'PA00d56a',
-      'P3d1b217',
-      'PBffea55',
-      'P455aaff',
-      'PC1793d1',
-      'P5b217d1',
-      'PDd11793',
-      'P693d1b2',
-      'PE17d1b2',
-      'P7eeeeee',
-      'PFffffff',
-      ],
 
-    );
+GetOptions(
+  'l|list'    => sub { print "$_\n" for get_colorschemes(); exit 0; },
+  'h|help'    => sub { pod2usage(verbose => 1); },
+  'm|man'     => sub { pod2usage(verbose => 3); },
+  'v|version' => sub { print "$APP v$VERSION\n" and exit 0; },
+);
 
-usage() if !$optColor;
-
-sub usage {
-  print "ttycolor -c colorscheme\n", "colorschemes:\n\n";
-  print "$_\n" for sort(keys(%palettes));
-  exit 0;
+if($ENV{DISPLAY}) {
+  print STDERR "ttycolor only works in a TTY; not in X.\n";
+  print STDERR "Proceed anyway? [N/y] ";
+  chomp(my $choice = <STDIN>);
+  if(lc($choice) ne 'y') {
+    exit 0;
+  }
 }
 
 
-for my $i(0..15) {
-  printf "\033]%s\n", $palettes{$optColor}[$i];
+my $colorscheme = shift // 'woldrich';
+my @colorschemes  = get_colorschemes();
+
+if( !($colorscheme  ~~ @colorschemes) ) {
+  $colorscheme = grab_new_colorscheme($colorscheme);
 }
+
+$colorscheme = get_colorscheme($colorscheme);
+
+for my $index(sort(keys(%{$colorscheme}))) {
+  print $colorscheme->{$index}, "\n";
+}
+
+sub grab_new_colorscheme {
+  my $c = shift;
+  print "No such colorscheme '$c'\n";
+RERUN:
+  print "Available colorschemes:\n";
+  print "$_\n" for @colorschemes;
+  print "> ";
+  chomp(my $choice = <STDIN>);
+
+  if(!($choice ~~ @colorschemes)) {
+    goto RERUN;
+  }
+  else {
+    return $choice;
+  }
+}
+
+=pod
+
+=head1 NAME
+
+ttycolor - set the colors in the TTY / Linux Virtual Console
+
+=head1 USAGE
+
+ttycolor <colorscheme>
+
+=head1 DESCRIPTION
+
+ttycolor allows you to change the colors in a Virtual Console.
+It uses L<Term::ExtendedColor::TTY> and L<Term::ExtendedColor::TTY::Colorschemes>
+to perform that magic.
+
+=head1 OPTIONS
+
+  -l, --list    list available colorschemes
+
+  -h, --help    show the help and exit
+  -v, --version show version info and exit
+  -m, --man     show the manual and exit
+
+=head1 SEE ALSO
+
+L<Term::ExtendedColor::TTY>, L<Term::ExtendedColor::TTY::Colorschemes>
+
+=head1 AUTHOR
+
+  Magnus Woldrich
+  CPAN ID: WOLDRICH
+  magnus@trapd00r.se
+  http://japh.se
+
+=head1 REPORTING BUGS
+
+Report bugs on rt.cpan.org or to magnus@trapd00r.se
+
+=head1 COPYRIGHT
+
+Copyright (C) 2010 Magnus Woldrich. All right reserved.
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+=cut
+
