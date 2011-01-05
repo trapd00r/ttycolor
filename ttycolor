@@ -10,7 +10,6 @@ use Getopt::Long;
 use Pod::Usage;
 
 
-
 GetOptions(
   'l|list'    => sub { print "$_\n" for get_colorschemes(); exit 0; },
   'h|help'    => sub { pod2usage(verbose => 1); },
@@ -35,11 +34,13 @@ if( !($colorscheme  ~~ @colorschemes) ) {
   $colorscheme = grab_new_colorscheme($colorscheme);
 }
 
-$colorscheme = get_colorscheme($colorscheme);
+$colorscheme = set_tty_color( get_colorscheme($colorscheme) );
 
 for my $index(sort(keys(%{$colorscheme}))) {
   print $colorscheme->{$index}, "\n";
 }
+printf("\033c\033(K\033[J\033[0m\033[?25h");
+
 
 sub grab_new_colorscheme {
   my $c = shift;
