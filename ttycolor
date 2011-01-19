@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 my $APP = 'ttycolor';
 use vars qw($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.10';
 
 use strict;
-use Term::ExtendedColor::TTY;
+use Term::ExtendedColor::TTY qw(set_tty_color);
 use Term::ExtendedColor::TTY::Colorschemes;
 use Getopt::Long;
 use Pod::Usage;
@@ -12,6 +12,9 @@ use Pod::Usage;
 
 GetOptions(
   'l|list'    => sub { print "$_\n" for get_colorschemes(); exit 0; },
+  't|tty=i'   => \(my $tty = ''),
+  'r|reset'   => \my $reset,
+
   'h|help'    => sub { pod2usage(verbose => 1); },
   'm|man'     => sub { pod2usage(verbose => 3); },
   'v|version' => sub { print "$APP v$VERSION\n" and exit 0; },
@@ -36,11 +39,17 @@ if( !($colorscheme  ~~ @colorschemes) ) {
 
 $colorscheme = set_tty_color( get_colorscheme($colorscheme) );
 
-for my $index(sort(keys(%{$colorscheme}))) {
-  print $colorscheme->{$index}, "\n";
-}
-printf("\033c\033(K\033[J\033[0m\033[?25h");
+open(my $fh, '>', "/dev/tty$tty") or die("Can't open tty: $!");
 
+
+if($reset) {
+  syswrite $fh, "\033]R";
+  exit;
+}
+
+for my $index(sort(keys(%{$colorscheme}))) {
+  syswrite $fh, $colorscheme->{$index};
+}
 
 sub grab_new_colorscheme {
   my $c = shift;
@@ -65,9 +74,9 @@ RERUN:
 
 ttycolor - set the colors in the TTY / Linux Virtual Console
 
-=head1 USAGE
+=head1 SYNOPSIS
 
-ttycolor <colorscheme>
+B<ttycolor> [OPTIONS] [colorscheme]
 
 =head1 DESCRIPTION
 
@@ -78,6 +87,8 @@ to perform that magic.
 =head1 OPTIONS
 
   -l, --list    list available colorschemes
+  -t, --tty=N   specify TTY
+  -r, --reset   reset to default TTY palette
 
   -h, --help    show the help and exit
   -v, --version show version info and exit
@@ -100,9 +111,8 @@ Report bugs on rt.cpan.org or to magnus@trapd00r.se
 
 =head1 COPYRIGHT
 
-Copyright (C) 2010 Magnus Woldrich. All right reserved.
+Copyright (C) 2010, 2011 Magnus Woldrich. All right reserved.
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =cut
-
