@@ -39,4 +39,4 @@ Copyright (C) 2010, 2011 Magnus Woldrich. All right reserved. This program is
 free software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 
-  [0]: http://devel.japh.se/App%3a%3aTTYcolor/ttycolor.png
+  [0]: http://devel.japh.se/App-TTYcolor/ttycolor.png
