@@ -12,16 +12,23 @@ WriteMakefile1(
     #BUILD_REQUIRES => {
     #},
 
-    NAME                => 'App::TTYcolor',
-    AUTHOR              => q{Magnus Woldrich <trapd00r@trapd00r.se>},
+    NAME                => 'App::ttycolor',
+    AUTHOR              => q{Magnus Woldrich <m@japh.se>},
     ABSTRACT           => 'Set the colors in the TTY / Linux Virtual Console',
-    VERSION_FROM        => './ttycolor',
+    VERSION_FROM        => 'bin/ttycolor',
     'LICENSE'           => 'perl',
     PL_FILES            => {},
-    EXE_FILES =>           ['./ttycolor'],
+    EXE_FILES =>           ['bin/ttycolor'],
     PREREQ_PM => {
-      'Term::ExtendedColor::TTY',
-      'Term::ExtendedColor::Colorschemes',
+      'Term::ExtendedColor::TTY' => 0,
+      'Term::ExtendedColor::TTY::Colorschemes' => 0,
+    },
+    META_ADD            => {
+      provides => {
+        'App::ttycolor' => {
+          file => 'bin/ttycolor',
+        },
+      },
     },
     MAN1PODS            => {
       },

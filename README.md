@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=65SFZJ25PSKG8&currency_code=SEK&source=url) - Every tiny cent helps a lot!
+
 # NAME
 
   ttycolor - set the colors in the TTY / Linux Virtual Console
@@ -27,15 +29,15 @@ perform this magic.
 # AUTHOR
       Magnus Woldrich
       CPAN ID: WOLDRICH
-      magnus@trapd00r.se
+      m@japh.se
       http://japh.se
 
 # REPORTING BUGS
-    Report bugs on rt.cpan.org or to magnus@trapd00r.se
+    Report bugs on rt.cpan.org or to m@japh.se
 
 # COPYRIGHT
 
-Copyright (C) 2010, 2011 Magnus Woldrich. All right reserved. This program is
+Copyright (C) 2010, 2011, 2018 Magnus Woldrich. All right reserved. This program is
 free software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 
