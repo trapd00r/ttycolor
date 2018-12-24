@@ -4,6 +4,9 @@ use vars qw($VERSION);
 $VERSION = '0.14';
 
 use strict;
+use warnings;
+no warnings 'experimental::smartmatch';
+
 use Term::ExtendedColor::TTY qw(set_tty_color);
 use Term::ExtendedColor::TTY::Colorschemes;
 use Getopt::Long;
