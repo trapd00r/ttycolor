@@ -3,37 +3,39 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile1(
-    META_MERGE => {
-        resources => {
-            repository => 'https://github.com/trapd00r/ttycolor',
+  META_MERGE => {
+      resources => {
+          repository => {
+            type       => 'git',
+            url        => 'https://github.com/trapd00r/ttycolor.git',
+            web        => 'https://github.com/trapd00r/ttycolor',
             bugtracker => 'https://github.com/trapd00r/ttycolor/issues',
-        },
+      },
     },
-    #BUILD_REQUIRES => {
-    #},
+  },
 
-    NAME                => 'App::ttycolor',
-    AUTHOR              => q{Magnus Woldrich <m@japh.se>},
-    ABSTRACT           => 'Set the colors in the TTY / Linux Virtual Console',
-    VERSION_FROM        => 'bin/ttycolor',
-    'LICENSE'           => 'perl',
-    PL_FILES            => {},
-    EXE_FILES =>           ['bin/ttycolor'],
-    PREREQ_PM => {
-      'Term::ExtendedColor::TTY' => 0,
-      'Term::ExtendedColor::TTY::Colorschemes' => 0,
-    },
-    META_ADD            => {
-      provides => {
-        'App::ttycolor' => {
-          file => 'bin/ttycolor',
-        },
+  NAME                => 'App::ttycolor',
+  AUTHOR              => q{Magnus Woldrich <m@japh.se>},
+  ABSTRACT           => 'Set the colors in the TTY / Linux Virtual Console',
+  VERSION_FROM        => 'bin/ttycolor',
+  'LICENSE'           => 'perl',
+  PL_FILES            => {},
+  EXE_FILES =>           ['bin/ttycolor'],
+  PREREQ_PM => {
+    'Term::ExtendedColor::TTY' => 0,
+    'Term::ExtendedColor::TTY::Colorschemes' => 0,
+  },
+  META_ADD            => {
+    provides => {
+      'App::ttycolor' => {
+        file => 'bin/ttycolor',
       },
     },
-    MAN1PODS            => {
-      },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ttycolor-*' },
+  },
+  MAN1PODS            => {
+    },
+  dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+  clean               => { FILES => 'ttycolor-*' },
 );
 
 sub WriteMakefile1 {
