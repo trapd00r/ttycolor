@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 my $APP = 'ttycolor';
 use vars qw($VERSION);
-$VERSION = '0.18';
+$VERSION = '0.20';
 
 use strict;
 use warnings;
